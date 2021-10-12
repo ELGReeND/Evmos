@@ -52,12 +52,12 @@ printf_n(){ printf "$1\n" "${@:2}"; }
 # Texts
 if [ "$language" = "RU" ]; then
 	t_ewa="Для просмотра баланса кошелька необходимо добавить его в систему виде переменной, поэтому ${C_LGn}введите пароль от кошелька${RES}"
+	t_id="ID ноды:                      ${C_LGn}%s${RES}"
 	t_nn="\nНазвание ноды:                ${C_LGn}%s${RES}"
 	t_id="Keybase ключ:                 ${C_LGn}%s${RES}"
 	t_si="Сайт:                         ${C_LGn}%s${RES}"
 	t_det="Описание:                     ${C_LGn}%s${RES}"
-	t_net="Сеть:                         ${C_LGn}%s${RES}"
-	t_ver="ID ноды:                      ${C_LGn}%s${RES}\n"
+	t_net="Сеть:                         ${C_LGn}%s${RES}\n"
 	t_pk="Публичный ключ валидатора:    ${C_LGn}%s${RES}"
 	t_va="Адрес валидатора:             ${C_LGn}%s${RES}"
 	t_nij1="Нода в тюрьме:                ${C_LR}да${RES}"
@@ -75,11 +75,11 @@ if [ "$language" = "RU" ]; then
 else
 	t_ewa="To view the wallet balance, you have to add it to the system as a variable, so ${C_LGn}enter the wallet password${RES}"
 	t_nn="\nMoniker:                       ${C_LGn}%s${RES}"
+	t_id="Node ID:                       ${C_LGn}%s${RES}"
 	t_id="Keybase key:                   ${C_LGn}%s${RES}"
 	t_si="Website:                       ${C_LGn}%s${RES}"
 	t_det="Details:                       ${C_LGn}%s${RES}"
-	t_net="Network:                       ${C_LGn}%s${RES}"
-	t_ver="Node ID:                       ${C_LGn}%s${RES}\n"
+	t_net="Network:                       ${C_LGn}%s${RES}\n"
 	t_pk="Validator public key:          ${C_LGn}%s${RES}"
 	t_va="Validator address:             ${C_LGn}%s${RES}"
 	t_nij1="The node in a jail:            ${C_LR}yes${RES}"
@@ -103,11 +103,11 @@ node_tcp=`cat "${config_dir}config/config.toml" | grep -oPm1 "(?<=^laddr = \")([
 status=`$daemon status --node "$node_tcp" 2>&1`
 moniker=`jq -r ".NodeInfo.moniker" <<< $status`
 node_info=`$daemon query staking validators --node "$node_tcp" --limit 1500 --output json | jq -r '.validators[] | select(.description.moniker=='\"$moniker\"')'`
+id=`jq -r ".NodeInfo.id" <<< $status`
 identity=`jq -r ".description.identity" <<< $node_info`
 website=`jq -r ".description.website" <<< $node_info`
 details=`jq -r ".description.details" <<< $node_info`
 network=`jq -r ".NodeInfo.network" <<< $status`
-id=`jq -r ".NodeInfo.id" <<< $status`
 validator_pub_key=`$daemon tendermint show-validator`
 validator_address=`jq -r ".operator_address" <<< $node_info`
 jailed=`jq -r ".jailed" <<< $node_info`
@@ -134,11 +134,11 @@ if [ "$raw_output" = "true" ]; then
 "$voting_power"
 else
 	printf_n "$t_nn" "$moniker"
+	printf_n "$t_id" "$id"
 	printf_n "$t_id" "$identity"
 	printf_n "$t_si" "$website"
 	printf_n "$t_det" "$details"
 	printf_n "$t_net" "$network"
-	printf_n "$t_ver" "$id"
 	printf_n "$t_pk" "$validator_pub_key"
 	printf_n "$t_va" "$validator_address"
 	if [ "$jailed" = "true" ]; then
