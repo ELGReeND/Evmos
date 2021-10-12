@@ -101,7 +101,7 @@ validator_address=`jq -r ".operator_address" <<< $node_info`
 jailed=`jq -r ".jailed" <<< $node_info`
 latest_block_height=`jq -r ".SyncInfo.latest_block_height" <<< $status`
 catching_up=`jq -r ".SyncInfo.catching_up" <<< $status`
-delegated=`bc -l <<< "$(jq -r ".tokens" <<< $node_info)/1000000"`
+delegated=`bc -l <<< "$(jq -r ".tokens" <<< $node_info)/1000000000000"`
 voting_power=`jq -r ".ValidatorInfo.VotingPower" <<< $status`
 # Output
 if [ "$raw_output" = "true" ]; then
@@ -137,7 +137,7 @@ else
 	if [ "$catching_up" = "true" ]; then
 		current_block=`wget -qO- 5.189.156.65:26657/block | jq -r ".result.block.header.height"`
 		diff=`bc -l <<< "$current_block-$latest_block_height"`
-		takes_time=`bc -l <<< "$diff/53/60"`
+		takes_time=`bc -l <<< "$diff/60/60"`
 		printf_n "$t_sy1"
 		printf_n "$t_sy2" "$current_block" "$latest_block_height" "$diff" "$takes_time"		
 	else
