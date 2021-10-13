@@ -14,7 +14,7 @@ while test $# -gt 0; do
 	-h|--help)
 		. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/logo.sh)
 		echo
-		echo -e "${C_LGn}Functionality${RES}: the script shows information about a Umee node"
+		echo -e "${C_LGn}Functionality${RES}: the script shows information about a Evmos node"
 		echo
 		echo -e "Usage: script ${C_LGn}[OPTIONS]${RES}"
 		echo
