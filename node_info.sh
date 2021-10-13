@@ -160,7 +160,7 @@ else
 	printf_n "$t_vp" "$voting_power"
 	if [ -n "$evmos_wallet_address" ]; then
 		printf_n "$t_wa" "$evmos_wallet_address"
-		balance=`bc -l <<< "$(evmosd query bank balances "$evmos_wallet_address" -o json --node "$node_tcp" | jq -r ".balances[0].amount")/1000000000000000000"`
+		balance=`bc -l <<< "$($daemon query bank balances "$evmos_wallet_address" -o json --node "$node_tcp" | jq -r ".balances[0].amount")/1000000000000000000"`
 		printf_n "$t_bal" "$balance"
 	fi
 fi
