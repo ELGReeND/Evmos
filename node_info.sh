@@ -97,7 +97,7 @@ fi
 sudo apt install bc -y &>/dev/null
 if [ -n "$evmos_wallet_name" ] && [ ! -n "$evmos_wallet_address" ]; then
 	printf_n "$t_ewa"
-	. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n evmos_wallet_address -v `evmosd keys show "$evmos_wallet_name" -a`
+	. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n evmos_wallet_address -v `$daemon keys show "$evmos_wallet_name" -a`
 fi
 node_tcp=`cat "${node_dir}config/config.toml" | grep -oPm1 "(?<=^laddr = \")([^%]+)(?=\")"`
 status=`$daemon status --node "$node_tcp" 2>&1`
