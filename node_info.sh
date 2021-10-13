@@ -155,7 +155,7 @@ else
 	fi
 	printf_n "$t_lb" "$latest_block_height"
 	if [ "$catching_up" = "true" ]; then
-		current_block=`wget -qO- 5.189.156.65:26657/block | jq -r ".result.block.header.height"`
+		current_block=`wget -qO- "http://arsiamons.rpc.evmos.org:26657/block" | jq -r ".result.block.header.height"`
 		diff=`bc -l <<< "$current_block-$latest_block_height"`
 		takes_time=`bc -l <<< "$diff/60/60"`
 		printf_n "$t_sy1"
