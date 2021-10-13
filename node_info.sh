@@ -2,7 +2,7 @@
 # Config
 daemon="`which evmosd`"
 token_name="photon"
-config_dir="$HOME/.evmosd/"
+node_dir="$HOME/.evmosd/"
 # Default variables
 language="EN"
 raw_output="false"
@@ -99,7 +99,7 @@ if [ -n "$evmos_wallet_name" ] && [ ! -n "$evmos_wallet_address" ]; then
 	printf_n "$t_ewa"
 	. <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/miscellaneous/insert_variable.sh) -n evmos_wallet_address -v `evmosd keys show "$evmos_wallet_name" -a`
 fi
-node_tcp=`cat "${config_dir}config/config.toml" | grep -oPm1 "(?<=^laddr = \")([^%]+)(?=\")"`
+node_tcp=`cat "${node_dir}config/config.toml" | grep -oPm1 "(?<=^laddr = \")([^%]+)(?=\")"`
 status=`$daemon status --node "$node_tcp" 2>&1`
 moniker=`jq -r ".NodeInfo.moniker" <<< $status`
 node_info=`$daemon query staking validators --node "$node_tcp" --limit 1500 --output json | jq -r '.validators[] | select(.description.moniker=='\"$moniker\"')'`
