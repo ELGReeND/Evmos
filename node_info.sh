@@ -71,7 +71,7 @@ if [ "$language" = "RU" ]; then
 	t_vp="Весомость голоса:             ${C_LGn}%.5f${RES}\n"
 	t_wa="Адрес кошелька:               ${C_LGn}%s${RES}"
 	t_bal="Баланс:                       ${C_LGn}%.3f${RES} ${token_name}\n"
-# Send Pull request with new texts to add a language - https://github.com/SecorD0/KiChain/blob/main/node_info.sh
+# Send Pull request with new texts to add a language - https://github.com/SecorD0/Evmos/blob/main/node_info.sh
 #elif [ "$language" = ".." ]; then
 else
 	t_ewa="To view the wallet balance, you have to add it to the system as a variable, so ${C_LGn}enter the wallet password${RES}"
