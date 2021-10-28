@@ -109,7 +109,7 @@ fi
 node_tcp=`cat "${node_dir}config/config.toml" | grep -oPm1 "(?<=^laddr = \")([^%]+)(?=\")"`
 status=`$daemon status --node "$node_tcp" 2>&1`
 moniker=`jq -r ".NodeInfo.moniker" <<< $status`
-node_info=`$daemon query staking validators --node "$node_tcp" --limit 5000 --output json | jq -r '.validators[] | select(.description.moniker=='\"$moniker\"')'`
+node_info=`$daemon query staking validators --node "$node_tcp" --limit 10000 --output json | jq -r '.validators[] | select(.description.moniker=='\"$moniker\"')'`
 id=`jq -r ".NodeInfo.id" <<< $status`
 identity=`jq -r ".description.identity" <<< $node_info`
 website=`jq -r ".description.website" <<< $node_info`
