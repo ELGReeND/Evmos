@@ -129,7 +129,7 @@ details=`jq -r ".description.details" <<< $node_info`
 
 network=`jq -r ".NodeInfo.network" <<< $status`
 node_id=`jq -r ".NodeInfo.id" <<< $status`
-node_version=`$daemon version 2>&1`
+node_version=`$daemon version`
 latest_block_height=`jq -r ".SyncInfo.latest_block_height" <<< $status`
 catching_up=`jq -r ".SyncInfo.catching_up" <<< $status`
 
