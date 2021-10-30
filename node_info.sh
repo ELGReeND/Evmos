@@ -3,9 +3,11 @@
 daemon="`which evmosd`"
 token_name="photon"
 node_dir="$HOME/.evmosd/"
+
 # Default variables
 language="EN"
 raw_output="false"
+
 # Options
 . <(wget -qO- https://raw.githubusercontent.com/SecorD0/utils/main/colors.sh) --
 option_value(){ echo $1 | sed -e 's%^--[^=]*=%%g; s%^-[^=]*=%%g'; }
@@ -47,29 +49,34 @@ while test $# -gt 0; do
 		;;
 	esac
 done
+
 # Functions
 printf_n(){ printf "$1\n" "${@:2}"; }
+
 # Texts
 if [ "$language" = "RU" ]; then
 	t_ewa="Для просмотра баланса кошелька необходимо добавить его в систему виде переменной, поэтому ${C_LGn}введите пароль от кошелька${RES}"
 	t_ewa_err="${C_LR}Не удалось получить адрес кошелька!${RES}"
 	t_nn="\nНазвание ноды:                ${C_LGn}%s${RES}"
-	t_ide="Keybase ключ:                 ${C_LGn}%s${RES}"
+	t_id="Keybase ключ:                 ${C_LGn}%s${RES}"
 	t_si="Сайт:                         ${C_LGn}%s${RES}"
 	t_det="Описание:                     ${C_LGn}%s${RES}\n"
+	
 	t_net="Сеть:                         ${C_LGn}%s${RES}"
-	t_id="ID ноды:                      ${C_LGn}%s${RES}"
-	t_nv="Версия ноды:                  ${C_LGn}%s${RES}\n"
-	t_pk="Публичный ключ валидатора:    ${C_LGn}%s${RES}"
-	t_va="Адрес валидатора:             ${C_LGn}%s${RES}"
-	t_nij1="Нода в тюрьме:                ${C_LR}да${RES}"
-	t_nij2="Нода в тюрьме:                ${C_LGn}нет${RES}"
+	t_ni="ID ноды:                      ${C_LGn}%s${RES}"
+	t_nv="Версия ноды:                  ${C_LGn}%s${RES}"
 	t_lb="Последний блок:               ${C_LGn}%s${RES}"
 	t_sy1="Нода синхронизирована:        ${C_LR}нет${RES}"
 	t_sy2="Осталось нагнать:             ${C_LR}%d-%d=%d (около %.2f мин.)${RES}"
 	t_sy3="Нода синхронизирована:        ${C_LGn}да${RES}"
+	
+	t_va="\nАдрес валидатора:             ${C_LGn}%s${RES}"
+	t_pk="Публичный ключ валидатора:    ${C_LGn}%s${RES}"
+	t_nij1="Валидатор в тюрьме:           ${C_LR}да${RES}"
+	t_nij2="Валидатор в тюрьме:           ${C_LGn}нет${RES}"	
 	t_del="Делегировано токенов на ноду: ${C_LGn}%.4f${RES} ${token_name}"
 	t_vp="Весомость голоса:             ${C_LGn}%.4f${RES}\n"
+	
 	t_wa="Адрес кошелька:               ${C_LGn}%s${RES}"
 	t_bal="Баланс:                       ${C_LGn}%.4f${RES} ${token_name}\n"
 # Send Pull request with new texts to add a language - https://github.com/SecorD0/Evmos/blob/main/node_info.sh
@@ -78,25 +85,29 @@ else
 	t_ewa="To view the wallet balance, you have to add it to the system as a variable, so ${C_LGn}enter the wallet password${RES}"
 	t_ewa_err="${C_LR}Failed to get the wallet address!${RES}"
 	t_nn="\nMoniker:                       ${C_LGn}%s${RES}"
-	t_ide="Keybase key:                   ${C_LGn}%s${RES}"
+	t_id="Keybase key:                   ${C_LGn}%s${RES}"
 	t_si="Website:                       ${C_LGn}%s${RES}"
 	t_det="Details:                       ${C_LGn}%s${RES}\n"
+	
 	t_net="Network:                       ${C_LGn}%s${RES}"
-	t_id="Node ID:                       ${C_LGn}%s${RES}"
-	t_nv="Node version:                  ${C_LGn}%s${RES}\n"
-	t_pk="Validator public key:          ${C_LGn}%s${RES}"
-	t_va="Validator address:             ${C_LGn}%s${RES}"
-	t_nij1="The node in a jail:            ${C_LR}yes${RES}"
-	t_nij2="The node in a jail:            ${C_LGn}no${RES}"
+	t_ni="Node ID:                       ${C_LGn}%s${RES}"
+	t_nv="Node version:                  ${C_LGn}%s${RES}"
 	t_lb="Latest block height:           ${C_LGn}%s${RES}"
 	t_sy1="The node is synchronized:      ${C_LR}no${RES}"
 	t_sy2="It remains to catch up:        ${C_LR}%d-%d=%d (about %.2f min.)${RES}"
 	t_sy3="The node is synchronized:      ${C_LGn}yes${RES}"
+	
+	t_va="\nValidator address:             ${C_LGn}%s${RES}"
+	t_pk="Validator public key:          ${C_LGn}%s${RES}"
+	t_nij1="The node in a jail:            ${C_LR}yes${RES}"
+	t_nij2="The node in a jail:            ${C_LGn}no${RES}"
 	t_del="Delegated tokens to the node:  ${C_LGn}%.4f${RES} ${token_name}"
 	t_vp="Voting power:                  ${C_LGn}%.4f${RES}\n"
+	
 	t_wa="Wallet address:                ${C_LGn}%s${RES}"
 	t_bal="Balance:                       ${C_LGn}%.4f${RES} ${token_name}\n"
 fi
+
 # Actions
 sudo apt install bc -y &>/dev/null
 if [ -n "$evmos_wallet_name" ] && [ ! -n "$evmos_wallet_address" ]; then
@@ -112,54 +123,50 @@ node_tcp=`cat "${node_dir}config/config.toml" | grep -oPm1 "(?<=^laddr = \")([^%
 status=`$daemon status --node "$node_tcp" 2>&1`
 moniker=`jq -r ".NodeInfo.moniker" <<< $status`
 node_info=`$daemon query staking validators --node "$node_tcp" --limit 10000 --output json | jq -r '.validators[] | select(.description.moniker=='\"$moniker\"')'`
-id=`jq -r ".NodeInfo.id" <<< $status`
-node_version=`$daemon version`
 identity=`jq -r ".description.identity" <<< $node_info`
 website=`jq -r ".description.website" <<< $node_info`
 details=`jq -r ".description.details" <<< $node_info`
+
 network=`jq -r ".NodeInfo.network" <<< $status`
-validator_pub_key=`$daemon tendermint show-validator | tr "\"" "'"`
-validator_address=`jq -r ".operator_address" <<< $node_info`
-jailed=`jq -r ".jailed" <<< $node_info`
+node_id=`jq -r ".NodeInfo.id" <<< $status`
+node_version=`$daemon version`
 latest_block_height=`jq -r ".SyncInfo.latest_block_height" <<< $status`
 catching_up=`jq -r ".SyncInfo.catching_up" <<< $status`
+
+validator_address=`jq -r ".operator_address" <<< $node_info`
+validator_pub_key=`$daemon tendermint show-validator | tr "\"" "'"`
+jailed=`jq -r ".jailed" <<< $node_info`
 delegated=`bc -l <<< "$(jq -r ".tokens" <<< $node_info)/1000000000000000000"`
-#voting_power=`jq -r ".ValidatorInfo.VotingPower" <<< $status`
 voting_power=`bc -l <<< "$(jq -r ".ValidatorInfo.VotingPower" <<< $status)/1000000000000"`
+
 # Output
 if [ "$raw_output" = "true" ]; then
-	printf_n '{"moniker": "%s", "identity": "%s", "website": "%s", "details": "%s", "network": "%s", "id": "%s", "node_version": "%s", "validator_pub_key": "%s", "validator_address": "%s", "jailed": %b, "latest_block_height": %d, "catching_up": %b, "delegated": %.4f, "voting_power": %.4f, "wallet_address": "%s", "balance": %.4f}' \
+	printf_n '{"moniker": "%s", "identity": "%s", "website": "%s", "details": "%s", "network": "%s", "node_id": "%s", "node_version": "%s", "latest_block_height": %d, "catching_up": %b, "validator_address": "%s", "validator_pub_key": "%s", "jailed": %b, "delegated": %.4f, "voting_power": %.4f, "wallet_address": "%s", "balance": %.4f}' \
 "$moniker" \
 "$identity" \
 "$website" \
 "$details" \
 "$network" \
-"$id" \
+"$node_id" \
 "$node_version" \
-"$validator_pub_key" \
-"$validator_address" \
-"$jailed" \
 "$latest_block_height" \
 "$catching_up" \
+"$validator_address" \
+"$validator_pub_key" \
+"$jailed" \
 "$delegated" \
 "$voting_power" \
 "$evmos_wallet_address" \
 "$balance" 2>/dev/null
 else
 	printf_n "$t_nn" "$moniker"
-	printf_n "$t_ide" "$identity"
+	printf_n "$t_id" "$identity"
 	printf_n "$t_si" "$website"
 	printf_n "$t_det" "$details"
+	
 	printf_n "$t_net" "$network"
-	printf_n "$t_id" "$id"
+	printf_n "$t_ni" "$node_id"
 	printf_n "$t_nv" "$node_version"
-	printf_n "$t_pk" "$validator_pub_key"
-	printf_n "$t_va" "$validator_address"
-	if [ "$jailed" = "true" ]; then
-		printf_n "$t_nij1"
-	else
-		printf_n "$t_nij2"
-	fi
 	printf_n "$t_lb" "$latest_block_height"
 	if [ "$catching_up" = "true" ]; then
 		current_block=`wget -qO- "http://arsiamons.rpc.evmos.org:26657/abci_info" | jq -r ".result.response.last_block_height"`
@@ -170,8 +177,17 @@ else
 	else
 		printf_n "$t_sy3"
 	fi
+	
+	printf_n "$t_va" "$validator_address"
+	printf_n "$t_pk" "$validator_pub_key"	
+	if [ "$jailed" = "true" ]; then
+		printf_n "$t_nij1"
+	else
+		printf_n "$t_nij2"
+	fi
 	printf_n "$t_del" "$delegated"
 	printf_n "$t_vp" "$voting_power"
+	
 	if [ -n "$evmos_wallet_address" ]; then
 		printf_n "$t_wa" "$evmos_wallet_address"
 		balance=`bc -l <<< "$($daemon query bank balances "$evmos_wallet_address" -o json --node "$node_tcp" | jq -r ".balances[0].amount")/1000000000000000000"`
