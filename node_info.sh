@@ -143,7 +143,7 @@ main() {
 	local delegated=`bc -l <<< "$(jq -r ".tokens" <<< $node_info)/1000000000000000000"`
 	local voting_power=`bc -l <<< "$(jq -r ".ValidatorInfo.VotingPower" <<< $status)/1000000000000"`
 	if [ -n "$wallet_address" ]; then
-		local balance=`bc -l <<< "$($daemon query bank balances "$wallet_address" -o json --node "$node_tcp" | jq -r ".balances[0].amount")/1000000000000000000"`
+		local balance=`bc -l <<< "$($daemon query bank balances "$wallet_address" -o json --node "http://arsiamons.rpc.evmos.org:26657/" | jq -r ".balances[0].amount")/1000000000000000000"`
 	fi
 
 	# Output
