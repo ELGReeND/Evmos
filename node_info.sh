@@ -64,7 +64,7 @@ main() {
 		local t_nn="\nНазвание ноды:              ${C_LGn}%s${RES}"
 		local t_id="Keybase ключ:               ${C_LGn}%s${RES}"
 		local t_si="Сайт:                       ${C_LGn}%s${RES}"
-		local t_det="Описание:                   ${C_LGn}%s${RES}\n"
+		local t_det="Описание:\n${C_LGn}%s${RES}\n"
 		
 		local t_net="Сеть:                       ${C_LGn}%s${RES}"
 		local t_ni="ID ноды:                    ${C_LGn}%s${RES}"
@@ -91,7 +91,7 @@ main() {
 		local t_nn="\nMoniker:                 ${C_LGn}%s${RES}"
 		local t_id="Keybase key:             ${C_LGn}%s${RES}"
 		local t_si="Website:                 ${C_LGn}%s${RES}"
-		local t_det="Details:                 ${C_LGn}%s${RES}\n"
+		local t_det="Details:\n${C_LGn}%s${RES}\n"
 		
 		local t_net="Network:                 ${C_LGn}%s${RES}"
 		local t_ni="Node ID:                 ${C_LGn}%s${RES}"
