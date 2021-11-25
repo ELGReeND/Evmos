@@ -6,6 +6,8 @@ node_dir="$HOME/.evmosd/"
 wallet_name="$evmos_wallet_name"
 wallet_address="$evmos_wallet_address"
 wallet_address_variable="evmos_wallet_address"
+global_rpc="http://5.189.156.65:26657/"
+explorer_url_template=""
 
 # Default variables
 language="EN"
@@ -75,6 +77,7 @@ main() {
 		local t_sy3="Нода синхронизирована:      ${C_LGn}да${RES}"
 		
 		local t_va="\nАдрес валидатора:           ${C_LGn}%s${RES}"
+		local t_eu="Страница в эксплорере:      ${C_LGn}%s${RES}"
 		local t_pk="Публичный ключ валидатора:  ${C_LGn}%s${RES}"
 		local t_nij1="Валидатор в тюрьме:         ${C_LR}да${RES}"
 		local t_nij2="Валидатор в тюрьме:         ${C_LGn}нет${RES}"	
@@ -102,6 +105,7 @@ main() {
 		local t_sy3="Node is synchronized:    ${C_LGn}yes${RES}"
 		
 		local t_va="\nValidator address:       ${C_LGn}%s${RES}"
+		local t_eu="Page in explorer:        ${C_LGn}%s${RES}"
 		local t_pk="Validator public key:    ${C_LGn}%s${RES}"
 		local t_nij1="Validator in a jail:     ${C_LR}yes${RES}"
 		local t_nij2="Validator in a jail:     ${C_LGn}no${RES}"
@@ -123,10 +127,10 @@ main() {
 			printf_n "$t_ewa_err"
 		fi
 	fi
-	local node_tcp=`cat "${node_dir}config/config.toml" | grep -oPm1 "(?<=^laddr = \")([^%]+)(?=\")"`
-	local status=`$daemon status --node "$node_tcp" 2>&1`
+	local local_rpc=`cat "${node_dir}config/config.toml" | grep -oPm1 "(?<=^laddr = \")([^%]+)(?=\")"`
+	local status=`$daemon status --node "$local_rpc" 2>&1`
 	local moniker=`jq -r ".NodeInfo.moniker" <<< $status`
-	local node_info=`$daemon query staking validators --node "$node_tcp" --limit 10000 --output json | jq -r '.validators[] | select(.description.moniker=='\"$moniker\"')'`
+	local node_info=`$daemon query staking validators --node "$local_rpc" --limit 10000 --output json | jq -r '.validators[] | select(.description.moniker=='\"$moniker\"')'`
 	local identity=`jq -r ".description.identity" <<< $node_info`
 	local website=`jq -r ".description.website" <<< $node_info`
 	local details=`jq -r ".description.details" <<< $node_info`
@@ -138,6 +142,7 @@ main() {
 	local catching_up=`jq -r ".SyncInfo.catching_up" <<< $status`
 
 	local validator_address=`jq -r ".operator_address" <<< $node_info`
+	#if [ -n "$validator_address" ]; then local explorer_url="${explorer_url_template}${validator_address}"; fi
 	local validator_pub_key=`$daemon tendermint show-validator | tr "\"" "'"`
 	local jailed=`jq -r ".jailed" <<< $node_info`
 	local delegated=`bc -l <<< "$(jq -r ".tokens" <<< $node_info)/1000000000000000000"`
@@ -148,7 +153,7 @@ main() {
 
 	# Output
 	if [ "$raw_output" = "true" ]; then
-		printf_n '{"moniker": "%s", "identity": "%s", "website": "%s", "details": "%s", "network": "%s", "node_id": "%s", "node_version": "%s", "latest_block_height": %d, "catching_up": %b, "validator_address": "%s", "validator_pub_key": "%s", "jailed": %b, "delegated": %.4f, "voting_power": %.4f, "wallet_address": "%s", "balance": %.4f}' \
+		printf_n '{"moniker": "%s", "identity": "%s", "website": "%s", "details": "%s", "network": "%s", "node_id": "%s", "node_version": "%s", "latest_block_height": %d, "catching_up": %b, "validator_address": "%s", "explorer_url": "%s", "validator_pub_key": "%s", "jailed": %b, "delegated": %.4f, "voting_power": %.4f, "wallet_address": "%s", "balance": %.4f}' \
 "$moniker" \
 "$identity" \
 "$website" \
@@ -159,6 +164,7 @@ main() {
 "$latest_block_height" \
 "$catching_up" \
 "$validator_address" \
+"$explorer_url" \
 "$validator_pub_key" \
 "$jailed" \
 "$delegated" \
@@ -176,7 +182,7 @@ main() {
 		printf_n "$t_nv" "$node_version"
 		printf_n "$t_lb" "$latest_block_height"
 		if [ "$catching_up" = "true" ]; then
-			local current_block=`wget -qO- "http://arsiamons.rpc.evmos.org:26657/abci_info" | jq -r ".result.response.last_block_height"`
+			local current_block=`wget -qO- "${global_rpc}abci_info" | jq -r ".result.response.last_block_height"`
 			local diff=`bc -l <<< "$current_block-$latest_block_height"`
 			local takes_time=`bc -l <<< "$diff/60/60"`
 			printf_n "$t_sy1"
