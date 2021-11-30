@@ -192,6 +192,7 @@ main() {
 		fi
 		
 		printf_n "$t_va" "$validator_address"
+		printf_n "$t_eu" "$explorer_url"
 		printf_n "$t_pk" "$validator_pub_key"	
 		if [ "$jailed" = "true" ]; then
 			printf_n "$t_nij1"
