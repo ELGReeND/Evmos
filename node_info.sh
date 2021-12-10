@@ -6,7 +6,7 @@ node_dir="$HOME/.evmosd/"
 wallet_name="$evmos_wallet_name"
 wallet_address="$evmos_wallet_address"
 wallet_address_variable="evmos_wallet_address"
-global_rpc="http://5.189.156.65:26657/"
+global_rpc="https://cosmos.rpc.evmos.dev/"
 explorer_url_template="https://explorer.evmos.nodes.guru/validator/"
 
 # Default variables
