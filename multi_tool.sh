@@ -41,8 +41,7 @@ install() {
 	sudo apt upgrade -y
 	sudo apt install wget git build-essential make jq -y
 	mkdir $HOME/evmos_temp
-	#local evmos_version=`wget -qO- https://api.github.com/repos/tharsis/evmos/releases/latest | jq -r ".tag_name" | sed "s%v%%g"`
-	local evmos_version="0.3.0"
+	local evmos_version=`wget -qO- https://api.github.com/repos/tharsis/evmos/releases/latest | jq -r ".tag_name" | sed "s%v%%g"`
 	wget -q "https://github.com/tharsis/evmos/releases/download/v${evmos_version}/evmos_${evmos_version}_Linux_x86_64.tar.gz"
 	tar -xvf "evmos_${evmos_version}_Linux_x86_64.tar.gz" -C $HOME/evmos_temp
 	mv $HOME/evmos_temp/bin/evmosd /usr/bin
@@ -51,8 +50,7 @@ install() {
 update() {
 	sudo systemctl stop evmosd
 	mkdir $HOME/evmos_temp
-	#local evmos_version=`wget -qO- https://api.github.com/repos/tharsis/evmos/releases/latest | jq -r ".tag_name" | sed "s%v%%g"`
-	local evmos_version="0.3.0"
+	local evmos_version=`wget -qO- https://api.github.com/repos/tharsis/evmos/releases/latest | jq -r ".tag_name" | sed "s%v%%g"`
 	wget -q "https://github.com/tharsis/evmos/releases/download/v${evmos_version}/evmos_${evmos_version}_Linux_x86_64.tar.gz"
 	tar -xvf "evmos_${evmos_version}_Linux_x86_64.tar.gz" -C $HOME/evmos_temp
 	mv $HOME/evmos_temp/bin/evmosd /usr/bin
